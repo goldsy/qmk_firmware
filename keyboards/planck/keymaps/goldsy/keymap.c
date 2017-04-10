@@ -54,9 +54,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    */
   [BASE_QWERTY_LAYER] = {
     {KC_TAB,  KC_Q,           KC_W,          KC_E,    KC_R,  KC_T,   KC_Y,    KC_U,  KC_I,    KC_O,          KC_P,           KC_QUOT},
-    {F(5),    KC_A,           KC_S,          KC_D,    KC_F,  KC_G,   KC_H,    KC_J,  KC_K,    KC_L,          F(1),           F(6)},
+    {F(5),    F(7),           KC_S,          KC_D,    KC_F,  KC_G,   KC_H,    KC_J,  KC_K,    KC_L,          F(1),           F(6)},
     {KC_LSPO, KC_Z,           KC_X,          KC_C,    KC_V,  KC_B,   KC_N,    KC_M,  KC_COMM, KC_DOT,        KC_SLSH,        KC_RSPC},
-    {F(3),    ALL_T(KC_LBRC), M(LALT_BRACE), KC_LGUI, LOWER, KC_BSPC, KC_SPC, RAISE, KC_RGUI, M(RALT_BRACE), ALL_T(KC_RBRC), F(4)}
+    {F(3),    ALL_T(KC_LBRC), KC_LGUI, M(LALT_BRACE), LOWER, KC_BSPC, KC_SPC, RAISE, M(RALT_BRACE), KC_RGUI, ALL_T(KC_RBRC), F(4)}
   },
 
   /* Base layer (Colemak)
@@ -109,7 +109,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [LOWER_LAYER] = {
     {LGUI(KC_GRV), KC_F1,          KC_F2,         KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7, KC_F8,   KC_F9,         KC_F10,         S(KC_3)},
     {F(5),         KC_1,           KC_2,          KC_3,    KC_4,    KC_5,    KC_6,    KC_7,  KC_8,    KC_9,          KC_0,           F(6)},
-    {KC_LSPO,      KC_MINS,        KC_EQL,        KC_GRV,  KC_BSLS, KC_A,    KC_B,    KC_C,  KC_D,    KC_E,          KC_F,           KC_RSPC},
+    {KC_LSPO,      KC_MINS,        KC_EQL,        KC_GRV,  KC_BSLS, KC_A,    KC_B,    KC_C,  KC_D,    KC_DOT,          KC_F,           KC_RSPC},
     {F(3),         ALL_T(KC_LBRC), M(LALT_BRACE), KC_LGUI, LOWER,   KC_BSPC, KC_BSPC, RAISE, KC_RGUI, M(RALT_BRACE), ALL_T(KC_RBRC), F(4)}
   },
 
@@ -146,7 +146,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    */
   [NAVIGATION_LAYER] = {
     {___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___},
-    {_______, ___x___, KC_HOME, KC_PGUP, KC_PGDN, KC_END,  KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, F(1),    _______},
+    {_______,  F(7)  , KC_HOME, KC_PGUP, KC_PGDN, KC_END,  KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, F(1),    _______},
     {_______, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, _______},
     {_______, _______, _______, _______, ___x___, ___x___, ___x___, ___x___, _______, _______, _______, _______}
   },
@@ -166,7 +166,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    *                        \___ Media ___/   \___ Screen/sleep __/   \___ Volume __/
    */
   [GUI_LAYER] = {
-    {_______, KC_BTN2, KC_MS_U, KC_BTN1, KC_WH_D, ___x___, ___x___, LCTL(LALT(LGUI(KC_LEFT))), LCTL(LGUI(KC_LEFT)),    LALT(LGUI(KC_UP)),   LCTL(LGUI(KC_RGHT)),    _______},
+    {_______, KC_BTN2, KC_MS_U, KC_BTN1, KC_WH_D, ___x___, ___x___, LCTL(LALT(LGUI(KC_LEFT))), LCTL(LGUI(KC_LEFT)),    LALT(LGUI(KC_UP)),   LCTL(LGUI(KC_RGHT)),    KC_BSPC},
     {_______, KC_MS_L, KC_MS_D, KC_MS_R, KC_WH_U, ___x___, ___x___, LALT(LGUI(KC_F)),          LALT(LGUI(KC_LEFT)),    LALT(LGUI(KC_C)),    LALT(LGUI(KC_RGHT)),    _______},
     {_______, KC_WH_L, KC_BTN3, KC_WH_R, ___x___, ___x___, ___x___, LCTL(LALT(LGUI(KC_RGHT))), S(LCTL(LGUI(KC_LEFT))), LALT(LGUI(KC_DOWN)), S(LCTL(LGUI(KC_RGHT))), _______},
     {_______, KC_MPRV, KC_MPLY, KC_MNXT, KC_SLCK, KC_SLEP, KC_SLEP, KC_PAUS,                   KC_MUTE,                KC_VOLD,             KC_VOLU,                _______}
@@ -202,6 +202,9 @@ const uint16_t PROGMEM fn_actions[] = {
   // Modifiers
   [5] = ACTION_MODS_TAP_KEY(MOD_LCTL, KC_ESC),
   [6] = ACTION_MODS_TAP_KEY(MOD_RCTL, KC_ENT),
+
+  // More Layer switching
+  [7] = ACTION_LAYER_TAP_KEY(NAVIGATION_LAYER, KC_A),
 };
 
 const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
