@@ -41,19 +41,19 @@ enum planck_keycodes {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   /* Base layer (Qwerty)
    *                ,-----------------------------------------------------------------------.
-   *                | Tab | Q   | W   | E   | R   | T   | Y   | U   | I   | O   | P   | '   |
+   *                | Tab | Q   | W   | E   | R   | T   | Y   | U   | I   | O   | P   | BSpc|
    *                |-----------------------------------------------------------------------|
    * Tap for Esc -- |Ctrl | A   | S   | D   | F   | G   | H   | J   | K   | L   |; Fn4|Ctrl | -- Tap for Enter
    *                |-----------------------------------------------------------------------|
    *   Tap for ( -- |Shift| Z   | X   | C   | V   | B   | N   | M   | ,   | .   | /   |Shift| -- Tap for )
    *                |-----------------------------------------------------------------------|
-   *   Tap for [ -- | Fn3 |Hyper| Alt |Super| Fn1 |   Space   | Fn2 |Super| Alt |Hyper| Fn3 | -- Tap for ]
+   *   Tap for [ -- | Fn3 |Hyper| Alt |Super| Fn1 | BSpc| Spc | Fn2 |Super| Alt |Hyper| Fn3 | -- Tap for ]
    *                `-----------------------------------------------------------------------'
    *                        /                                                     /
    *   Tap for { } --------'-----------------------------------------------------'
    */
   [BASE_QWERTY_LAYER] = {
-    {KC_TAB,  KC_Q,           KC_W,          KC_E,    KC_R,  KC_T,   KC_Y,    KC_U,  KC_I,    KC_O,          KC_P,           KC_QUOT},
+    {KC_TAB,  KC_Q,           KC_W,          KC_E,    KC_R,  KC_T,   KC_Y,    KC_U,  KC_I,    KC_O,          KC_P,           KC_BSPC},
     {F(5),    F(7),           KC_S,          KC_D,    KC_F,  KC_G,   KC_H,    KC_J,  KC_K,    KC_L,          F(1),           F(6)},
     {KC_LSPO, KC_Z,           KC_X,          KC_C,    KC_V,  KC_B,   KC_N,    KC_M,  KC_COMM, KC_DOT,        KC_SLSH,        KC_RSPC},
     {F(3),    ALL_T(KC_LBRC), KC_LGUI, M(LALT_BRACE), LOWER, KC_BSPC, KC_SPC, RAISE, M(RALT_BRACE), KC_RGUI, ALL_T(KC_RBRC), F(4)}
@@ -155,7 +155,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    *
    *        Mouse keys -----/```````````````````\               /```````````````````\----- Window manager
    *                ,-----------------------------------------------------------------------.
-   *                |     |Ms B2|Ms Up|Ms B1|Ms WD|     |     |Prev | TL  | Top | TR  |     |
+   *                |     |Ms B2|Ms Up|Ms B1|Ms WD|     |     |Prev | TL  | Top | TR  | '   |
    *                |-----------------------------------------------------------------------|
    *                |     |Ms L |Ms Dn|Ms R |Ms WU|     |     |Full |Left |Centr|Right|     |
    *                |-----------------------------------------------------------------------|
@@ -166,7 +166,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    *                        \___ Media ___/   \___ Screen/sleep __/   \___ Volume __/
    */
   [GUI_LAYER] = {
-    {_______, KC_BTN2, KC_MS_U, KC_BTN1, KC_WH_D, ___x___, ___x___, LCTL(LALT(LGUI(KC_LEFT))), LCTL(LGUI(KC_LEFT)),    LALT(LGUI(KC_UP)),   LCTL(LGUI(KC_RGHT)),    KC_BSPC},
+    {_______, KC_BTN2, KC_MS_U, KC_BTN1, KC_WH_D, ___x___, ___x___, LCTL(LALT(LGUI(KC_LEFT))), LCTL(LGUI(KC_LEFT)),    LALT(LGUI(KC_UP)),   LCTL(LGUI(KC_RGHT)),    KC_QUOT},
     {_______, KC_MS_L, KC_MS_D, KC_MS_R, KC_WH_U, ___x___, ___x___, LALT(LGUI(KC_F)),          LALT(LGUI(KC_LEFT)),    LALT(LGUI(KC_C)),    LALT(LGUI(KC_RGHT)),    _______},
     {_______, KC_WH_L, KC_BTN3, KC_WH_R, ___x___, ___x___, ___x___, LCTL(LALT(LGUI(KC_RGHT))), S(LCTL(LGUI(KC_LEFT))), LALT(LGUI(KC_DOWN)), S(LCTL(LGUI(KC_RGHT))), _______},
     {_______, KC_MPRV, KC_MPLY, KC_MNXT, KC_SLCK, KC_SLEP, KC_SLEP, KC_PAUS,                   KC_MUTE,                KC_VOLD,             KC_VOLU,                _______}
