@@ -4,7 +4,6 @@
 #include "audio.h"
 #endif
 #include "eeconfig.h"
-#include "keymap_plover.h"
 #include "action_tapping.h"
 
 extern keymap_config_t keymap_config;
@@ -12,7 +11,7 @@ extern keymap_config_t keymap_config;
 // Keymap layers
 #define BASE_QWERTY_LAYER 0
 #define BASE_COLEMAK_LAYER 1
-#define BASE_STENO_LAYER 2
+#define NUMERIC_LAYER 2
 #define LOWER_LAYER 3
 #define RAISE_LAYER 4
 #define NAVIGATION_LAYER 5
@@ -30,12 +29,9 @@ extern keymap_config_t keymap_config;
 // Special key codes
 enum planck_keycodes {
   QWERTY = SAFE_RANGE,
-  COLEMAK,
-  STENO,
   LOWER,
   RAISE,
-  PV_EXIT,
-  PV_LOOK
+  NUM_LYR
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -43,11 +39,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    *                ,-----------------------------------------------------------------------.
    *                | Tab | Q   | W   | E   | R   | T   | Y   | U   | I   | O   | P   | BSpc|
    *                |-----------------------------------------------------------------------|
-   * Tap for Esc -- |Ctrl | A   | S   | D   | F   | G   | H   | J   | K   | L   |; Fn4|Ctrl | -- Tap for Enter
+   * Tap for Esc -- |Ctrl | A   | S   | D   | F   | G   | H   | J   | K   | L   |; Fn5|Ctrl | -- Tap for Enter
    *                |-----------------------------------------------------------------------|
    *   Tap for ( -- |Shift| Z   | X   | C   | V   | B   | N   | M   | ,   | .   | /   |Shift| -- Tap for )
    *                |-----------------------------------------------------------------------|
-   *   Tap for [ -- | Fn3 |Hyper| Alt |Super| Fn1 | BSpc| Spc | Fn2 |Super| Alt |Hyper| Fn3 | -- Tap for ]
+   *   Tap for [ -- | Fn3 |Hyper|Super| Alt | Fn1 | Fn4 | Spc | Fn2 | Alt |Super|Hyper| Fn3 | -- Tap for ]
    *                `-----------------------------------------------------------------------'
    *                        /                                                     /
    *   Tap for { } --------'-----------------------------------------------------'
@@ -56,86 +52,68 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     {KC_TAB,  KC_Q,           KC_W,          KC_E,    KC_R,  KC_T,   KC_Y,    KC_U,  KC_I,    KC_O,          KC_P,           KC_BSPC},
     {F(5),    F(7),           KC_S,          KC_D,    KC_F,  KC_G,   KC_H,    KC_J,  KC_K,    KC_L,          F(1),           F(6)},
     {KC_LSPO, KC_Z,           KC_X,          KC_C,    KC_V,  KC_B,   KC_N,    KC_M,  KC_COMM, KC_DOT,        KC_SLSH,        KC_RSPC},
-    {F(3),    ALL_T(KC_LBRC), KC_LGUI, M(LALT_BRACE), LOWER, KC_BSPC, KC_SPC, RAISE, M(RALT_BRACE), KC_RGUI, ALL_T(KC_RBRC), F(4)}
+    {F(3),    ALL_T(KC_LBRC), KC_LGUI, M(LALT_BRACE), LOWER, NUM_LYR, KC_SPC, RAISE, M(RALT_BRACE), KC_RGUI, ALL_T(KC_RBRC), F(4)}
   },
 
-  /* Base layer (Colemak)
+  /* Lower layer (Fn1)
    *                ,-----------------------------------------------------------------------.
-   *                |     | Q   | W   | F   | P   | G   | J   | L   | U   | Y   | ;   |     |
+   *                |  `  |     |     |     |     |     |     |     |     |  -  |  =  |  \  |
    *                |-----------------------------------------------------------------------|
-   *                |     | A   | R   | S   | T   | D   | H   | N   | E   | I   |O Fn4|     |
+   *                |     |     |     |     |     |     |     |     |     |     |  '  |     |
    *                |-----------------------------------------------------------------------|
-   *                |     | Z   | X   | C   | V   | B   | K   | M   |     |     |     |     |
+   *                |Shift|  [  |  <  |  {  |     |     |     |     |  }  |  >  |  ]  |Shift|
    *                |-----------------------------------------------------------------------|
-   *                |     |     |     |     |     |           |     |     |     |     |     |
-   *                `-----------------------------------------------------------------------'
-   */
-  [BASE_COLEMAK_LAYER] = {
-    {_______, KC_Q,    KC_W,    KC_F,    KC_P,    KC_G,    KC_J,    KC_L,    KC_U,    KC_Y,    KC_SCLN, _______},
-    {_______, KC_A,    KC_R,    KC_S,    KC_T,    KC_D,    KC_H,    KC_N,    KC_E,    KC_I,    F(2),    _______},
-    {_______, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_K,    KC_M,    _______, _______, _______, _______},
-    {_______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______}
-  },
-
-  /* Base layer (Qwerty-Steno)
-   *                ,-----------------------------------------------------------------------.
-   *                |  #  |  #  |  #  |  #  |  #  |  #  |  #  |  #  |  #  |  #  |  #  |  #  |
-   *                |-----------------------------------------------------------------------|
-   *                |     |     |  T  |  P  |  H  |           |  F  |  P  |  L  |  T  |  D  |
-   *                |-----|  S  |-----+-----+-----|     *     |-----+-----+-----+-----+-----|
-   *                |     |     |  K  |  W  |  R  |           |  R  |  B  |  G  |  S  |  Z  |
-   *                |-----------------------------------------------------------------------|
-   *                |Exit |     |     |  A  |  O  |           |  E  |  U  |     |     |     |
-   *                `-----------------------------------------------------------------------'
-   */
-  [BASE_STENO_LAYER] = {
-    {PV_NUM,  PV_NUM,  PV_NUM,  PV_NUM, PV_NUM, PV_NUM,  PV_NUM,  PV_NUM, PV_NUM, PV_NUM,  PV_NUM,  PV_NUM},
-    {PV_LOOK, PV_LS,   PV_LT,   PV_LP,  PV_LH,  PV_STAR, PV_STAR, PV_RF,  PV_RP,  PV_RL,   PV_RT,   PV_RD},
-    {PV_LOOK, PV_LS,   PV_LK,   PV_LW,  PV_LR,  PV_STAR, PV_STAR, PV_RR,  PV_RB,  PV_RG,   PV_RS,   PV_RZ},
-    {PV_EXIT, ___x___, ___x___, PV_A,   PV_O,   _______, _______, PV_E,   PV_U,   ___x___, ___x___, ___x___}
-  },
-
-  /* Numeric layer
-   *                ,-----------------------------------------------------------------------.
-   * Application -- |D-Grv| F1  | F2  | F3  | F4  | F5  | F6  | F7  | F8  | F9  | F10 | #   |
-   *      window    |-----------------------------------------------------------------------|
-   *    switcher    |     | 1   | 2   | 3   | 4   | 5   | 6   | 7   | 8   | 9   | 0   |     |
-   *                |-----------------------------------------------------------------------|
-   *                |     | -   | =   | `   | \   | a   | b   | c   | d   | e   | f   |     |
-   *                |-----------------------------------------------------------------------|
-   *                |     |     |     |     |     | Backspace |     |     |     |     |     |
+   *                | Fn3 |Hyper|Super| Alt | Fn1 | Fn4 | Spc | Fn2 | Alt |Super|Hyper| Fn3 |
    *                `-----------------------------------------------------------------------'
    */
   [LOWER_LAYER] = {
-    {LGUI(KC_GRV), KC_F1,          KC_F2,         KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7, KC_F8,   KC_F9,         KC_F10,         S(KC_3)},
-    {F(5),         KC_1,           KC_2,          KC_3,    KC_4,    KC_5,    KC_6,    KC_7,  KC_8,    KC_9,          KC_0,           F(6)},
-    {KC_LSPO,      KC_MINS,        KC_EQL,        KC_GRV,  KC_BSLS, KC_A,    KC_B,    KC_C,  KC_D,    KC_DOT,          KC_F,           KC_RSPC},
-    {F(3),         ALL_T(KC_LBRC), M(LALT_BRACE), KC_LGUI, LOWER,   KC_BSPC, KC_BSPC, RAISE, KC_RGUI, M(RALT_BRACE), ALL_T(KC_RBRC), F(4)}
+    {KC_GRV,  ___x___,        ___x___,    ___x___,       ___x___, ___x___, ___x___, ___x___, ___x___,       KC_MINS,   KC_EQL,         KC_BSLS},
+    {___x___, ___x___,        ___x___,    ___x___,       ___x___, ___x___, ___x___, ___x___, ___x___,       ___x___,   KC_QUOT,        ___x___},
+    {_______, KC_LBRC,        S(KC_COMM), S(KC_LBRC),    ___x___, ___x___, ___x___, ___x___, S(KC_RBRC),    S(KC_DOT), KC_RBRC,        _______},
+    {F(3),    ALL_T(KC_LBRC), KC_LGUI,    M(LALT_BRACE), LOWER,   NUM_LYR, KC_SPC,  RAISE,   M(RALT_BRACE), KC_RGUI,   ALL_T(KC_RBRC), F(4)}
   },
 
-  /* Symbol layer
+  /* Symbol (Raise) layer (Fn2)
    *                ,-----------------------------------------------------------------------.
-   *                |     | F11 | F12 | F13 | F14 | F15 | F16 | F17 | F18 | F19 | F20 | #   |
+   *                |     |  !  |  @  |  #  |  $  |  %  |  ^  |  &  |  *  |  (  |  )  | Del |
    *                |-----------------------------------------------------------------------|
-   *                |     | !   | @   | #   | $   | %   | ^   | &   | *   | '   | "   |     | \
+   *                |     | F1  | F2  | F3  | F4  | F5  | F6  | F7  | F8  | F9  | F10 |     | \
    *                |-----------------------------------------------------------------------|  |-- Mostly shifted version
-   *                |     | _   | +   | ~   | |   |     |ndash|mdash|     |     |     |     | /    of lower layer
+   *                |     | F11 | F12 | F13 | F14 | F15 | F16 | F17 | F18 | F19 | F20 |     |     | /    of lower layer
    *                |-----------------------------------------------------------------------|
-   *                |     |     |     |     |     |  Delete   |     |     |     |     |     |
+   *                | Fn3 |     |     |     | Fn1 | Fn4 | Spc | Fn2 |     |     |     | Fn3 |
    *                `-----------------------------------------------------------------------'
    */
   [RAISE_LAYER] = {
-    {_______, KC_F11,  KC_F12,  KC_F13,  KC_F14,  KC_F15,  KC_F16,        KC_F17,           KC_F18,  KC_F19,  KC_F20,     S(KC_3)},
-    {_______, S(KC_1), S(KC_2), S(KC_3), S(KC_4), S(KC_5), S(KC_6),       S(KC_7),          S(KC_8), KC_QUOT, S(KC_QUOT), _______},
-    {_______, KC_UNDS, KC_PLUS, KC_TILD, KC_PIPE, ___x___, LALT(KC_MINS), S(LALT(KC_MINS)), ___x___, ___x___, ___x___,    _______},
-    {_______, _______, _______, _______, _______, KC_DEL,  KC_DEL,        _______,          _______, _______, _______,    _______}
+    {_______, S(KC_1), S(KC_2), S(KC_3), S(KC_4), S(KC_5), S(KC_6), S(KC_7), S(KC_8), S(KC_9), S(KC_0),  KC_DEL},
+    {_______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,   _______},
+    {_______, KC_F11,  KC_F12,  KC_F13,  KC_F14,  KC_F15,  KC_F16,  KC_F17,  KC_F18,  KC_F19,  KC_F20,   _______},
+    {F(3),    _______, _______, _______, LOWER,   ___x___, KC_SPC,  RAISE,   _______, _______, _______,  F(4)}
+  },
+  
+  /* Numeric layer
+   *                ,-----------------------------------------------------------------------.
+   * Application -- | Tab |  1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  |  0  | Bspc|
+   *      window    |-----------------------------------------------------------------------|
+   *    switcher    |     |     |     |     |     |     |     |  4  |  5  |  6  |  -  |  /  |
+   *                |-----------------------------------------------------------------------|
+   *                |     |     |     |     |     |     |     |  1  |  2  |  3  |  +  |  *  |
+   *                |-----------------------------------------------------------------------|
+   *                |     |     |     |     | Fn1 | Fn4 | Spc |  0  |  ,  |  .  |Enter|     |
+   *                `-----------------------------------------------------------------------'
+   */
+  [NUMERIC_LAYER] = {
+    {KC_TAB,  KC_1,           KC_2,    KC_3,          KC_4,    KC_5,    KC_6,    KC_7,  KC_8,    KC_9,   KC_0,    S(KC_3)},
+    {F(5),    ___x___,        ___x___, ___x___,       ___x___, ___x___, ___x___, KC_4,  KC_5,    KC_6,   KC_MINS, KC_SLSH},
+    {___x___, ___x___,        ___x___, ___x___,       ___x___, ___x___, ___x___, KC_1,  KC_2,    KC_3,   KC_PLUS, KC_PAST},
+    {F(3),    ALL_T(KC_LBRC), KC_LGUI, M(LALT_BRACE), LOWER,   NUM_LYR, KC_BSPC, KC_0, KC_COMM,  KC_DOT, KC_ENT,  F(4)}
   },
 
   /* Directional navigation layer
    *
    *         Large movements -----/```````````````````\   /```````````````````\----- Vim-style arrow keys
    *                ,-----------------------------------------------------------------------.
-   *                |     |     |     |     |     |     |     |     |     |     |     |     |
+   *                |     |     |     |     |     |     |     |     |     |     |     | Del |
    *                |-----------------------------------------------------------------------|
    *                |     |     |Home |PgUp |PgDn | End |Left |Down | Up  |Right|     |     |
    *                |-----------------------------------------------------------------------|
@@ -145,7 +123,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    *                `-----------------------------------------------------------------------'
    */
   [NAVIGATION_LAYER] = {
-    {___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___},
+    {___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, KC_DEL},
     {_______,  F(7)  , KC_HOME, KC_PGUP, KC_PGDN, KC_END,  KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, F(1),    _______},
     {_______, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, _______},
     {_______, _______, _______, _______, ___x___, ___x___, ___x___, ___x___, _______, _______, _______, _______}
@@ -176,7 +154,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    *                ,-----------------------------------------------------------------------.
    *    Firmware -- |     |Reset|     |     |     |     |     |     |     |     |     |     |
    *                |-----------------------------------------------------------------------|
-   *   Set layer -- |     |Qwert|Colem|Steno| ... |     |     |     |     |     |     |     |
+   *   Set layer -- |     |Qwert|     |     | ... |     |     |     |     |     |     |     |
    *                |-----------------------------------------------------------------------|
    *       Audio -- |     |Voic-|Voic+|Mus +|Mus -|MIDI+|MIDI-|     |     |Aud +|Aud -|     |
    *                |-----------------------------------------------------------------------|
@@ -186,7 +164,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    */
   [KEYBOARD_LAYER] = {
     {___x___, RESET,   ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___},
-    {___x___, QWERTY,  COLEMAK, STENO,   ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___},
+    {___x___, QWERTY,  ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___},
     {___x___, MUV_DE,  MUV_IN,  MU_ON,   MU_OFF,  MI_ON,   MI_OFF,  ___x___, ___x___, AU_ON,   AU_OFF,  ___x___},
     {___x___, ___x___, ___x___, ___x___, LOWER,   BL_TOGG, BL_TOGG, RAISE,   BL_TOGG, BL_DEC,  BL_INC,  ___x___}
   }
@@ -275,14 +253,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         persistant_default_layer_set(1UL<<BASE_QWERTY_LAYER);
       }
       return false;
-    case COLEMAK:
-      if (record->event.pressed) {
-#ifdef AUDIO_ENABLE
-        PLAY_NOTE_ARRAY(tone_colemak, false, 0);
-#endif
-        persistant_default_layer_set(1UL<<BASE_COLEMAK_LAYER);
-      }
-      return false;
     case LOWER:
       if (record->event.pressed) {
         layer_on(LOWER_LAYER);
@@ -301,37 +271,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         update_tri_layer(LOWER_LAYER, RAISE_LAYER, KEYBOARD_LAYER);
       }
       return false;
-    case STENO:
+    case NUM_LYR:
       if (record->event.pressed) {
-#ifdef AUDIO_ENABLE
-        stop_all_notes();
-        PLAY_NOTE_ARRAY(tone_plover, false, 0);
-#endif
-        layer_off(RAISE_LAYER);
-        layer_off(LOWER_LAYER);
-        layer_off(KEYBOARD_LAYER);
-        layer_on(BASE_STENO_LAYER);
-        if (!eeconfig_is_enabled()) {
-          eeconfig_init();
-        }
-        keymap_config.raw = eeconfig_read_keymap();
-        keymap_config.nkro = 1;
-        eeconfig_update_keymap(keymap_config.raw);
-        plover_resume();
-      }
-      return false;
-    case PV_EXIT:
-      if (record->event.pressed) {
-#ifdef AUDIO_ENABLE
-        PLAY_NOTE_ARRAY(tone_plover_gb, false, 0);
-#endif
-        plover_suspend();
-        layer_off(BASE_STENO_LAYER);
-      }
-      return false;
-    case PV_LOOK:
-      if (record->event.pressed) {
-        plover_lookup();
+        layer_on(NUMERIC_LAYER);
+        update_tri_layer(LOWER_LAYER, RAISE_LAYER, KEYBOARD_LAYER);
+      } else {
+        layer_off(NUMERIC_LAYER);
+        update_tri_layer(LOWER_LAYER, RAISE_LAYER, KEYBOARD_LAYER);
       }
       return false;
   }
@@ -342,52 +288,6 @@ void matrix_init_user(void) {
 #ifdef AUDIO_ENABLE
   startup_user();
 #endif
-}
-
-// Send PHROPB ({PLOVER:RESUME}).
-void plover_resume() {
-  register_code(PV_LP);
-  register_code(PV_LH);
-  register_code(PV_LR);
-  register_code(PV_O);
-  register_code(PV_RP);
-  register_code(PV_RB);
-  unregister_code(PV_LP);
-  unregister_code(PV_LH);
-  unregister_code(PV_LR);
-  unregister_code(PV_O);
-  unregister_code(PV_RP);
-  unregister_code(PV_RB);
-}
-
-// Send PHROF ({PLOVER:SUSPEND}).
-void plover_suspend() {
-  register_code(PV_LP);
-  register_code(PV_LH);
-  register_code(PV_LR);
-  register_code(PV_O);
-  register_code(PV_RF);
-  unregister_code(PV_LP);
-  unregister_code(PV_LH);
-  unregister_code(PV_LR);
-  unregister_code(PV_O);
-  unregister_code(PV_RF);
-}
-
-// Send PHROBG ({PLOVER:LOOKUP}).
-void plover_lookup() {
-  register_code(PV_LP);
-  register_code(PV_LH);
-  register_code(PV_LR);
-  register_code(PV_O);
-  register_code(PV_RB);
-  register_code(PV_RG);
-  unregister_code(PV_LP);
-  unregister_code(PV_LH);
-  unregister_code(PV_LR);
-  unregister_code(PV_O);
-  unregister_code(PV_RB);
-  unregister_code(PV_RG);
 }
 
 #ifdef AUDIO_ENABLE
