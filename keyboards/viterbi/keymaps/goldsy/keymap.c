@@ -30,6 +30,7 @@ enum custom_keycodes {
 #define KC_ KC_TRNS
 #define _______ KC_TRNS
 #define XXXXXXX KC_NO
+#define ___x___ KC_NO
 #define KC_AJST ADJUST
 #define KC_LOWR LOWER
 #define KC_RASE RAISE
@@ -143,8 +144,33 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|----+----+----+----+-------+------+-------|    |-------+----+-------+------+-------+-------+----|
          ,    ,    ,    ,   C   ,      ,   B   ,            , 0  , COMM  , DOT  , ENT   ,       ,    ,
   //|----+----+----+----+-------+------+-------|    |-------+----+-------+------+-------+-------+----|
-         ,    ,    ,    ,       ,      ,       ,      SPC   ,    ,       ,      ,       ,       ,                       
+         ,    ,    ,    ,       ,      , NUM   ,      SPC   ,    ,       ,      ,       ,       ,                       
   //`----+----+----+----+-------+------+-------'    `-------+----+-------+------+-------+-------+----'
+  ),
+
+
+
+  /* Directional navigation layer
+   *
+   *        Large movements -----/````````````````````\   /````````````````````\----- Vim-style arrow keys
+   *          ,-----------------------------------------------------------------------------------.
+   *          |     |     |     |     |     |     |     |     |     |     |     |     |     | Del |
+   *          |-----------------------------------------------------------------------------------|
+   *          |     |     |     |     |     |     |     |     |     |     |     |     |     |     |
+   *          |-----------------------------------------------------------------------------------|
+   *          |     |     |     |Home |PgUp |PgDn | End |Left |Down | Up  |Right|     |     |     |
+   *          |-----------------------------------------------------------------------------------|
+   *          |     |     |     |     |     |     |     |     |     |     |     |     |     |     |
+   *          |-----------------------------------------------------------------------------------|
+   *          |     |     |     |     |     |     |     |     |     |     |     |     |     |     |
+   *          `-----------------------------------------------------------------------------------'
+   */
+  [_NAV_LYR] = KEYMAP(
+    ___x___,___x___,___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, KC_DEL,
+    ___x___,___x___,___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___,
+    _______, KC_NAV,_______, KC_HOME, KC_PGUP, KC_PGDN,  KC_END, KC_LEFT, KC_DOWN,  KC_UP , KC_RGHT, _______, _______, _______,
+    _______,___x___,___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, _______,
+    _______,___x___,_______, _______, _______, ___x___, ___x___, ___x___, ___x___, _______, _______, _______, ___x___, _______
   ),
 
   [_ADJUST] = KEYMAP(
@@ -197,6 +223,26 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             return false;
             break;
+	case NUMLYR:
+	    if (record->event.pressed) {
+		    layer_on(_NUM_LYR);
+		    update_tri_layer(_LOWER, _RAISE, _NUM_LYR);
+	    } else {
+		    layer_off(_NUM_LYR);
+		    update_tri_layer(_LOWER, _RAISE, _NUM_LYR);
+	    }
+	    return false;
+	    break;
+	case NAVLYR:
+	    if (record->event.pressed) {
+		    layer_on(_NAV_LYR);
+		    update_tri_layer(_LOWER, _RAISE, _NAV_LYR);
+	    } else {
+		    layer_off(_NAV_LYR);
+		    update_tri_layer(_LOWER, _RAISE, _NAV_LYR);
+	    }
+	    return false;
+	    break;
         case ADJUST:
             if (record->event.pressed) {
                 layer_on(_ADJUST);
