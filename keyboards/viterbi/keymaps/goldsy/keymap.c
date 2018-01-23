@@ -217,40 +217,36 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             if (record->event.pressed) {
                 layer_on(_RAISE);
                 update_tri_layer(_LOWER, _RAISE, _ADJUST);
-            } else {
-                layer_off(_RAISE);
-                update_tri_layer(_LOWER, _RAISE, _ADJUST);
-            }
-            return false;
-            break;
+	    } else {
+		    layer_off(_RAISE);
+		    update_tri_layer(_LOWER, _RAISE, _ADJUST);
+	    }
+	    return false;
+	    break;
 	case NUMLYR:
 	    if (record->event.pressed) {
 		    layer_on(_NUM_LYR);
-		    update_tri_layer(_LOWER, _RAISE, _NUM_LYR);
 	    } else {
 		    layer_off(_NUM_LYR);
-		    update_tri_layer(_LOWER, _RAISE, _NUM_LYR);
 	    }
 	    return false;
 	    break;
 	case NAVLYR:
 	    if (record->event.pressed) {
 		    layer_on(_NAV_LYR);
-		    update_tri_layer(_LOWER, _RAISE, _NAV_LYR);
 	    } else {
 		    layer_off(_NAV_LYR);
-		    update_tri_layer(_LOWER, _RAISE, _NAV_LYR);
 	    }
 	    return false;
 	    break;
-        case ADJUST:
-            if (record->event.pressed) {
-                layer_on(_ADJUST);
-            } else {
-                layer_off(_ADJUST);
-            }
-            return false;
-            break;
+	case ADJUST:
+	    if (record->event.pressed) {
+		    layer_on(_ADJUST);
+	    } else {
+		    layer_off(_ADJUST);
+	    }
+	    return false;
+	    break;
     }
     return true;
 }
